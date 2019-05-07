@@ -3,13 +3,16 @@ from seq_predict import search as seq_ai
 
 
 app = Flask(__name__)
+logfile = open("seq-logs.txt", "a")
 
 
 def parse_seq(seq_string):
+    logfile.write(seq_string + "\n")
+    logfile.flush()
     seq_string = seq_string.replace(',', ' ')
     seq_string = ''.join(c for c in seq_string if c.isdigit() or c == ' ')
     seq = list(map(int, seq_string.split()))
-    return seq    
+    return seq
 
 
 @app.route('/')
