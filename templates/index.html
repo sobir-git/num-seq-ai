@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Number Sequence AI</title>
+	<style type="text/css">
+		body {
+			background-color: #540DFF;
+			color: #fff;
+		}
+		div.container {
+			width: 600px;
+			margin: auto;
+		}
+		.center{
+			width: 100%;
+			text-align: center;
+		}
+		.code {
+			background-color: #0008;
+			padding: 5px;
+			min-height: 200px;
+			color: #fff;
+			border:1px solid;
+			width:100%;
+			overflow:auto;
+			outline:none;
+			resize:none;
+		}
+		input {
+			margin-bottom: 25px;
+		}
+		.seq {
+			color: #fff;
+			background-color: #0008;
+			border: 1px solid;
+			border-radius: 2px;
+			padding: 2px;
+			text-decoration: None; 
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<H2 class="center"> Number Sequence AI </H2>
+		<p class="center"> Enter a sequence of numbers and let AI predict the next number. </p>
+		<p> Examples:
+		{% for seq in example_sequences %}
+			<a href="{{'?seq='+seq}}" class="seq">{{seq}}</a>
+		{% endfor %}
+		</p>
+
+		<input id="seq-input" style="width: 80%;" type="text" name="input_sequence" value="{{seq_string}}">
+		<button id="go_button" onclick="goClick()" style="width: 10%;">Go</button>
+		<textarea readonly id="result" class="code">{{result}}</textarea>
+	</div>
+
+	<script type="text/javascript">
+		function goClick(){
+			var seq_input = document.getElementById("seq-input")
+	       	document.getElementById("result").value = "Loading...";
+
+			var sequence = seq_input.value;
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+			    if (this.readyState == 4 && this.status == 200) {
+			       // Typical action to be performed when the document is ready:
+			       document.getElementById("result").value = xhttp.responseText;
+			    } 
+			    else if (this.readyState == 0) {
+			       document.getElementById("result").value = "Connecting to Server";
+			    } 
+			    else if (this.readyState == 3) {
+			       document.getElementById("result").value = "Processing request...";
+			    }
+			    else if (this.readyState == 4 && this.status != 200) {
+			       document.getElementById("result").value = "Server Error. (status:" +this.status + ")";
+			   }
+			};
+			xhttp.open("GET", "/solve?seq=" + sequence, true);
+			xhttp.send();
+		}
+	</script>
+
+</body>
+</html>
