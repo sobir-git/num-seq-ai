@@ -24,7 +24,7 @@ def index():
     if "seq" in request.args:
         seq_string = request.args['seq']
         seq = parse_seq(seq_string)
-        if len(seq) > 7:
+        if len(seq) > 12:
             return "Sequence is too long."
         result = seq_ai.findNext(seq).log_tree.to_string()
     return render_template('index.html', example_sequences=example_sequences,
