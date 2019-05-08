@@ -1,6 +1,6 @@
 """ Command line interface """
 
-from search import findNext
+from seq_predict.search import findNext
 
 
 run = True

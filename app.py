@@ -11,7 +11,7 @@ def parse_seq(seq_string):
     logfile.write(seq_string + "\n")
     logfile.flush()
     seq_string = seq_string.replace(',', ' ')
-    seq_string = ''.join(c for c in seq_string if c.isdigit() or c == ' ')
+    seq_string = ''.join(c for c in seq_string if c in '0123456789-. ')
     seq = list(map(int, seq_string.split()))
     return seq
 
@@ -24,7 +24,10 @@ def index():
     seq_string = ""
     if "seq" in request.args:
         seq_string = request.args['seq']
-        seq = parse_seq(seq_string)
+        try:
+            seq = parse_seq(seq_string)
+        except Exception:
+            return "Invalid Sequence"
         if len(seq) > MAX_SEQ_LEN:
             return "Sequence is too long."
         result = seq_ai.findNext(seq).log_tree.to_string()
@@ -38,7 +41,10 @@ def solve():
     if "seq" in request.args:
         seq = request.args['seq']
         seq_string = request.args['seq']
-        seq = parse_seq(seq_string)
+        try:
+            seq = parse_seq(seq_string)
+        except Exception:
+            return "Invalid Sequence"
         if len(seq) > MAX_SEQ_LEN:
             return "Sequence is too long."
         result = seq_ai.findNext(seq).log_tree.to_string()

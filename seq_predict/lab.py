@@ -1,5 +1,5 @@
-import search
-from .search import findNext
+from seq_predict import search
+from seq_predict.search import findNext
 
 
 def test():

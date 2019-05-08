@@ -2,7 +2,7 @@
 Some sequence representation classes
 """
 
-from .helper import sgn, iter_pairs
+from seq_predict.helper import sgn, iter_pairs
 __all__ = ("AlterRepr", "DiffRepr", "NormalRepr", "AbsRepr", "RatioRepr",
            "DivModRepr", "DivModRepr2")
 

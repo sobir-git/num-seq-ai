@@ -1,4 +1,4 @@
-from .seq_repr import NormalRepr
+from seq_predict.seq_repr import NormalRepr
 
 
 # class WellKnownSequence(NormalRepr):

@@ -1,12 +1,12 @@
 from __future__ import division, print_function
 
 from itertools import chain
-from .seq_repr import *
-from .seq_logging import LogTree
-from .helper import match_seq, complete_match_seq
+from seq_predict.seq_repr import *
+from seq_predict.seq_logging import LogTree
+from seq_predict.helper import match_seq, complete_match_seq
 
 # loading well-known sequences
-from . import database
+from seq_predict import database
 
 
 logformat = "{s} --> {n} \t{c}"
