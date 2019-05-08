@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for
+from flask import Flask, render_template, request
 from seq_predict import search as seq_ai
 
 
@@ -17,7 +17,8 @@ def parse_seq(seq_string):
 
 @app.route('/')
 def index():
-    example_sequences = ["12, 15, 21, 24, 30", "2, 5, 14, 41", "1, 1, 2, 3, 5", "1, 8, 27"]
+    example_sequences = ["12, 15, 21, 24, 30", "2, 5, 14, 41", "1, 1, 2, 3, 5",
+                         "1, 8, 27", "1, 3, 3, 9, 27"]
     result = ""
     seq_string = ""
     if "seq" in request.args:
@@ -27,7 +28,7 @@ def index():
             return "Sequence is too long."
         result = seq_ai.findNext(seq).log_tree.to_string()
     return render_template('index.html', example_sequences=example_sequences,
-        result=result, seq_string=seq_string)
+                           result=result, seq_string=seq_string)
 
 
 @app.route('/solve')

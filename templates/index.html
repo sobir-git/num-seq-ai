@@ -10,6 +10,7 @@
 		div.container {
 			width: 600px;
 			margin: auto;
+			padding: 10px;
 		}
 		.center{
 			width: 100%;
@@ -20,8 +21,8 @@
 			padding: 5px;
 			min-height: 200px;
 			color: #fff;
-			border:1px solid;
-			width:100%;
+			border: 1px solid #fff4;
+			width: 590px;
 			overflow:auto;
 			outline:none;
 			resize:none;
@@ -32,10 +33,12 @@
 		.seq {
 			color: #fff;
 			background-color: #0008;
-			border: 1px solid;
-			border-radius: 2px;
-			padding: 2px;
+			border: 1px solid #fff4;
+			border-radius: 4px;
+			padding: 3px;
 			text-decoration: None; 
+			white-space: nowrap;
+			display: inline-block;
 		}
 	</style>
 </head>
@@ -43,9 +46,9 @@
 	<div class="container">
 		<H2 class="center"> Number Sequence AI </H2>
 		<p class="center"> Enter a sequence of numbers and let AI predict the next number. </p>
-		<p> Examples:
+		<p> Examples (clickable):
 		{% for seq in example_sequences %}
-			<a href="{{'?seq='+seq}}" class="seq">{{seq}}</a>
+			<a href="{{'?seq='+seq}}" class="seq">{{seq}}</a>,
 		{% endfor %}
 		</p>
 
@@ -55,6 +58,12 @@
 	</div>
 
 	<script type="text/javascript">
+		const node = document.getElementsById("seq-input");
+		node.addEventListener("keyup", function(event) {
+		    if (event.key === "Enter")
+		        goClick();
+		});
+
 		function goClick(){
 			var seq_input = document.getElementById("seq-input")
 	       	document.getElementById("result").value = "Loading...";
