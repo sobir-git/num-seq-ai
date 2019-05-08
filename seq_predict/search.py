@@ -3,11 +3,10 @@ from __future__ import division, print_function
 from itertools import chain
 from .seq_repr import *
 from .seq_logging import LogTree
-from .helper import match_seq
+from .helper import match_seq, complete_match_seq
 
 # loading well-known sequences
-from .database import famous_sequences
-database = famous_sequences
+from . import database
 
 
 logformat = "{s} --> {n} \t{c}"
@@ -41,18 +40,41 @@ def byLookUp(seq, depth_limit):
     # predict by trying to match the sequence with a famous sequence from database
 
     match_size, next_number, matching_seq = 0, None, None
-    for s in chain(local_known_sequences, database):
+    local_match = False
+    db_match = False
+    for s in local_known_sequences:
         size, number = match_seq(seq, s)
         if size > match_size:
             next_number = number
             match_size = size
             matching_seq = s
 
-    if not matching_seq or match_size < 3:
-        return SearchResult(None)
+    if matching_seq and match_size >= 3:
+        local_match = True
+
+    if not local_match:
+        for s in database.famous_sequences:
+            match_index = complete_match_seq(seq, s)
+            if match_index is not None:
+                next_number = s[match_index + len(seq)]
+                match_size = len(seq)
+                matching_seq = s
+
+        if matching_seq and match_size >= 3:
+            db_match = True
+            seq_description = database.get_description(matching_seq)
+
 
     # create log tree
-    c = "match with {}".format(matching_seq.readable()[:15], match_size)
+    if not (local_match or db_match):
+        return SearchResult(None)
+
+    match_seq_string = matching_seq.readable()[:20]
+    while match_seq_string[-1] != ',':
+        match_seq_string = match_seq_string[:-1]
+    c = "match with {}".format(match_seq_string, match_size)
+    if db_match:
+        c += "(%s)" % seq_description
     log = logformat.format(s=seq.readable(), n=next_number, c=c)
     log_tree = LogTree()
     log_tree.add_child(log)
@@ -328,6 +350,7 @@ depth_limit = 70
 def findNext(seq):
     # convert to normal
     seq = NormalRepr(seq)
+    local_known_sequences.clear()
     local_known_sequences.append(seq)
 
     # getting result

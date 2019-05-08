@@ -31,6 +31,10 @@ def isConstant(seq):
 def match_seq(s, seq):
     """try to match the sequences s[i:] to seq[a:b] (b < len(s2))
     return a tuple: (the size of the longest match, seq[b])
+
+    Arguments:
+        s: sequence to match
+        seq: sequence to be matched with
     """
 
     match_size, match_b = 0, len(seq) - 1
@@ -54,6 +58,24 @@ def match_seq(s, seq):
     return (match_size, seq[match_b + 1])
 
 
+def complete_match_seq(s, seq):
+    """ Try to match sequence s completely inside seq.
+    Return first seq index of matching else None."""
+    l_s = len(s)
+    l_seq = len(seq)
+    if l_seq - 1 < l_s:
+        return None
+
+    first_index = 0
+    for first_index in range(l_seq - l_s + 1):
+        fi1 = first_index
+        fi2 = fi1 - first_index
+        while fi2 < l_s and fi1 < l_seq and s[fi2] == seq[fi1]:
+            fi1, fi2 = fi1 + 1, fi2 + 1
+        if fi2 == l_s:
+            return first_index
+
+
 def test_match_seq():
     '''
     Tests for match_seq function
@@ -75,5 +97,24 @@ def test_match_seq():
     assert match_seq(s, seq) == (0, None)
 
 
+def test_complete_match_seq():
+    seq = [1, 4, 9, 16, 25]
+    s = [3, 1, 4, 9]
+    assert complete_match_seq(s, seq) == None
+
+    s = [1, 4, 9]
+    assert complete_match_seq(s, seq) == 0
+
+    s = [1, 4, 9, 16]
+    assert complete_match_seq(s, seq) == 0
+
+    s = [1, 4, 9, 10]
+    assert complete_match_seq(s, seq) == None
+
+    s = [4, 9, 16]
+    assert complete_match_seq(s, seq) == 1
+
+
 if __name__ == "__main__":
-    test_match_seq()
+    # test_match_seq()
+    test_complete_match_seq()

@@ -4,6 +4,7 @@ from seq_predict import search as seq_ai
 
 app = Flask(__name__)
 logfile = open("seq-logs.txt", "a")
+MAX_SEQ_LEN = 12
 
 
 def parse_seq(seq_string):
@@ -24,7 +25,7 @@ def index():
     if "seq" in request.args:
         seq_string = request.args['seq']
         seq = parse_seq(seq_string)
-        if len(seq) > 12:
+        if len(seq) > MAX_SEQ_LEN:
             return "Sequence is too long."
         result = seq_ai.findNext(seq).log_tree.to_string()
     return render_template('index.html', example_sequences=example_sequences,
@@ -38,7 +39,7 @@ def solve():
         seq = request.args['seq']
         seq_string = request.args['seq']
         seq = parse_seq(seq_string)
-        if len(seq) > 7:
+        if len(seq) > MAX_SEQ_LEN:
             return "Sequence is too long."
         result = seq_ai.findNext(seq).log_tree.to_string()
         return result
